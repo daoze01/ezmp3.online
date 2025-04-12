@@ -1,0 +1,19 @@
+# 设置CSS文件的正确MIME类型
+/css/*
+  Content-Type: text/css
+
+# 设置JavaScript文件的正确MIME类型
+/js/*
+  Content-Type: application/javascript
+
+# 设置字体文件的正确MIME类型
+/*.woff
+  Content-Type: font/woff
+/*.woff2
+  Content-Type: font/woff2
+/*.ttf
+  Content-Type: font/ttf
+
+# 设置Access-Control-Allow-Origin头以解决CORS问题
+/*
+  Access-Control-Allow-Origin: *

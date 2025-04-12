@@ -1,0 +1,9 @@
+# 确保CSS和JS文件能被正确访问
+/css/styles.css /css/styles.css 200
+/css/style.css /css/style.css 200
+/js/script.js /js/script.js 200
+/js/api.js /js/api.js 200
+/js/i18n.js /js/i18n.js 200
+
+# 所有其他路径回退到index.html
+/* /index.html 200
