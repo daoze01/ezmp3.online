@@ -1,0 +1,245 @@
+:root {
+    /* 浅色主题默认变量 */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f8f8;
+    --bg-tertiary: #f0f0f0;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --border-color: #e0e0e0;
+    --highlight-color: #3b82f6;
+    --input-bg: #ffffff;
+    --notification-bg: #ffffff;
+    --notification-border: #e0e0e0;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --card-bg: #ffffff;
+    --hover-bg: #f0f7ff;
+    --success-color: #10b981;
+    --error-color: #ef4444;
+}
+
+/* 黑暗模式变量 */
+html.dark-mode {
+    --bg-primary: #121212;
+    --bg-secondary: #1e1e1e;
+    --bg-tertiary: #2d2d2d;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0a0;
+    --border-color: #444444;
+    --highlight-color: #4f96f6;
+    --input-bg: #2d2d2d;
+    --notification-bg: #1e1e1e;
+    --notification-border: #444444;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --card-bg: #2d2d2d;
+    --hover-bg: #3a3a3a;
+    --success-color: #059669;
+    --error-color: #dc2626;
+}
+
+/* 全局基础样式 */
+// ... existing code ...
+
+/* 使用CSS变量应用颜色 */
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+header {
+    background-color: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary);
+    transition: color 0.3s;
+}
+
+/* 重新定义按钮样式使用CSS变量 */
+.btn {
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.btn-primary {
+    background-color: var(--highlight-color);
+    color: white;
+}
+
+.btn-secondary {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+/* 表单元素样式 */
+input, select, textarea {
+    background-color: var(--input-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+/* 通知样式 */
+.notification-container {
+    background-color: var(--notification-bg);
+    border: 1px solid var(--notification-border);
+    box-shadow: 0 4px 6px var(--shadow-color);
+    transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.notification {
+    background-color: var(--notification-bg);
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* 主内容区 */
+.main-container {
+    background-color: var(--bg-primary);
+    transition: background-color 0.3s;
+}
+
+/* 视频预览容器 */
+.video-preview-container {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* 黑暗模式切换按钮样式 */
+.theme-toggle {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.theme-toggle:hover {
+    background-color: var(--hover-bg);
+}
+
+/* 进度条 */
+progress {
+    background-color: var(--bg-tertiary);
+}
+
+progress::-webkit-progress-bar {
+    background-color: var(--bg-tertiary);
+}
+
+progress::-webkit-progress-value {
+    background-color: var(--highlight-color);
+}
+
+progress::-moz-progress-bar {
+    background-color: var(--highlight-color);
+}
+
+/* 设置对话框 */
+#settingsDialog {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 8px var(--shadow-color);
+    transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+/* 下载历史对话框 */
+#downloadHistoryDialog {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 8px var(--shadow-color);
+    transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.download-item {
+    border-bottom: 1px solid var(--border-color);
+    transition: border-color 0.3s;
+}
+
+/* 黑暗模式图标样式 */
+.theme-toggle .moon-icon {
+    display: inline-block;
+}
+
+.theme-toggle .sun-icon {
+    display: none;
+}
+
+html.dark-mode .theme-toggle .moon-icon {
+    display: none;
+}
+
+html.dark-mode .theme-toggle .sun-icon {
+    display: inline-block;
+}
+
+/* 卡片样式 */
+.card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 4px var(--shadow-color);
+    transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+/* 特性卡片样式 */
+.feature-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    transition: background-color 0.3s, border-color 0.3s, transform 0.3s;
+}
+
+.feature-card:hover {
+    background-color: var(--hover-bg);
+    transform: translateY(-5px);
+}
+
+/* 价格卡片样式 */
+.pricing-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* 背景样式修正 */
+.bg-white {
+    background-color: var(--card-bg) !important;
+    transition: background-color 0.3s;
+}
+
+.bg-gray-50, .bg-gray-100 {
+    background-color: var(--bg-secondary) !important;
+    transition: background-color 0.3s;
+}
+
+/* 下载状态通知样式 */
+.download-complete {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.download-error {
+    background-color: var(--error-color);
+    color: white;
+}
+
+/* 按钮悬停状态 */
+.btn:hover {
+    background-color: var(--hover-bg);
+}
+
+.btn-primary:hover {
+    background-color: var(--highlight-color);
+    filter: brightness(1.1);
+}
+
+/* 其余CSS代码 */
+// ... existing code ... 

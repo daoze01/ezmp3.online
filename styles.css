@@ -1,0 +1,176 @@
+/* ezmp3 Custom Styles - Apple-inspired Color Scheme */
+
+:root {
+    --apple-blue: #0071e3;
+    --apple-blue-dark: #0058b0;
+    --apple-gray: #f5f5f7;
+    --apple-gray-dark: #86868b;
+    --apple-black: #1d1d1f;
+    --apple-white: #ffffff;
+    --apple-red: #ff3b30;
+    --apple-green: #34c759;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: var(--apple-black);
+    line-height: 1.5;
+}
+
+/* Custom Button Styles */
+.btn-apple {
+    background-color: var(--apple-blue);
+    color: white;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-apple:hover {
+    background-color: var(--apple-blue-dark);
+    transform: scale(1.02);
+}
+
+/* Custom Header Styles */
+header {
+    background: var(--apple-black);
+}
+
+/* Hero Section Gradient */
+.hero-gradient {
+    background: linear-gradient(135deg, #9bb5ce 0%, #e2ebf0 100%);
+}
+
+/* Converter Box Enhancements */
+.converter-box {
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    transition: all 0.3s ease;
+}
+
+.converter-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Input Field Focus */
+input:focus {
+    border-color: var(--apple-blue);
+    box-shadow: 0 0 0 2px rgba(0, 113, 227, 0.2);
+    outline: none;
+}
+
+/* Progress Bar Animation */
+@keyframes progress-animation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.animated-progress-bar {
+    background: linear-gradient(90deg, var(--apple-blue), #5ac8fa, var(--apple-blue));
+    background-size: 200% 100%;
+    animation: progress-animation 2s infinite;
+}
+
+/* Feature Cards */
+.feature-card {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Testimonial Cards */
+.testimonial-card {
+    border-radius: 12px;
+    border: 1px solid #e1e1e1;
+    transition: all 0.3s ease;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+    border-color: var(--apple-blue);
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+    
+    h1 {
+        font-size: 2.5rem;
+    }
+    
+    h2 {
+        font-size: 2rem;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: var(--apple-black);
+        color: var(--apple-white);
+    }
+    
+    .bg-white {
+        background-color: #2c2c2e;
+    }
+    
+    .text-gray-600 {
+        color: #a1a1a6;
+    }
+    
+    .text-gray-800 {
+        color: #f5f5f7;
+    }
+}
+
+/* Animations */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--apple-gray-dark);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--apple-blue);
+} 
