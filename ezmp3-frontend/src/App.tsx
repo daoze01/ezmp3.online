@@ -33,13 +33,12 @@ function App() {
       setProgress(100)
 
 } catch (err) {
-  if (err instanceof Error) {
-    console.error('Conversion error:', err);
-    setError(err.message || '转换过程中发生错误');
-  } else {
-    console.error('Unknown error:', err);
-    setError('转换过程中发生未知错误');
-  }
+if (err instanceof Error) {
+  console.error('Conversion error:', err);
+  setError(err.message || '转换过程中发生错误');
+} else {
+  console.error('Unknown error:', err);
+  setError('转换过程中发生未知错误');
 }
 finally {
       setConverting(false)
