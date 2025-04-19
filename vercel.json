@@ -2,9 +2,7 @@
   "version": 2,
   "buildCommand": "cd ezmp3-frontend && npm install && npm run build",
   "outputDirectory": "ezmp3-frontend/dist",
-  "cleanUrls": true,
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/index.html" }
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 } 
