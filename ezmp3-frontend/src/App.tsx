@@ -32,7 +32,10 @@ function App() {
       setDownloadUrl(data.downloadUrl)
       setProgress(100)
     } catch (err) {
-      setError(err.message)
+      console.error('Conversion error:', err)
+      setError(typeof err === 'object' && err !== null && 'message' in err
+          ? String(err.message)
+          : '转换过程中发生错误')
     } finally {
       setConverting(false)
     }
