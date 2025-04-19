@@ -1,11 +1,12 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "framework": "vite",
+  "version": 2,
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/index.html"
+      "destination": "/ezmp3-frontend/$1"
     }
-  ]
+  ],
+  "buildCommand": "cd ezmp3-frontend && npm install && npm run build",
+  "outputDirectory": "ezmp3-frontend/dist",
+  "framework": "vite"
 } 
