@@ -1,8 +1,7 @@
 {
-  "framework": "vite",
+  "version": 2,
   "buildCommand": "cd ezmp3-frontend && npm install && npm run build",
   "outputDirectory": "ezmp3-frontend/dist",
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
-  ]
+  "trailingSlash": false,
+  "cleanUrls": true
 } 
