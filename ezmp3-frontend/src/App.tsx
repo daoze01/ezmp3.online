@@ -31,12 +31,11 @@ function App() {
 
       setDownloadUrl(data.downloadUrl)
       setProgress(100)
-    } catch (err) {
-      console.error('Conversion error:', err)
-      setError(typeof err === 'object' && err !== null && 'message' in err
-          ? String(err.message)
-          : '转换过程中发生错误')
-    } finally {
+  } catch (err) {
+    console.error('Conversion error:', err)
+    const error = err as Error
+    setError(error?.message || '转换过程中发生错误')
+}finally {
       setConverting(false)
     }
   }
