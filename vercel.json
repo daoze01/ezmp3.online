@@ -1,12 +1,11 @@
 {
   "version": 2,
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/ezmp3-frontend/$1"
-    }
-  ],
   "buildCommand": "cd ezmp3-frontend && npm install && npm run build",
   "outputDirectory": "ezmp3-frontend/dist",
-  "framework": "vite"
+  "framework": "vite",
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/assets/(.*)", "dest": "/assets/$1" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
 } 
