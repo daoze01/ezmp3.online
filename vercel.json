@@ -1,13 +1,27 @@
 {
   "version": 2,
-  "buildCommand": "cd ezmp3-frontend && npm install && npm run build",
-  "outputDirectory": "ezmp3-frontend/dist",
-  "builds": [
-    { "src": "static/**", "use": "@vercel/static" },
-    { "src": "ezmp3-frontend/package.json", "use": "@vercel/static-build", "config": { "distDir": "dist" } }
+  "headers": [
+    {
+      "source": "/src/main.tsx",
+      "headers": [
+        { "key": "Content-Type", "value": "text/javascript" }
+      ]
+    },
+    {
+      "source": "/(.*).js",
+      "headers": [
+        { "key": "Content-Type", "value": "text/javascript" }
+      ]
+    },
+    {
+      "source": "/(.*).css",
+      "headers": [
+        { "key": "Content-Type", "value": "text/css" }
+      ]
+    }
   ],
-  "routes": [
-    { "src": "^/$", "dest": "/static/index.html" },
-    { "src": "^/ezmp3-frontend/(.*)", "dest": "/ezmp3-frontend/$1" }
+  "rewrites": [
+    { "source": "/", "destination": "/static/index.html" },
+    { "source": "/(.*)", "destination": "/ezmp3-frontend/$1" }
   ]
 } 
