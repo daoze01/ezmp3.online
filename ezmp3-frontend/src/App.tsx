@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { createClient, FunctionsHttpError, FunctionsRelayError } from '@supabase/supabase-js'
+import { createClient } from '@supabase/supabase-js'
 
 // 初始化Supabase客户端
 const supabase = createClient(
