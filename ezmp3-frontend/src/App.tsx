@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { createClient, FunctionsError } from '@supabase/supabase-js'
+import { createClient, FunctionsHttpError, FunctionsRelayError } from '@supabase/supabase-js'
 
 // 初始化Supabase客户端
 const supabase = createClient(
@@ -15,36 +15,34 @@ function App() {
   const [progress, setProgress] = useState(0)
   const [downloadUrl, setDownloadUrl] = useState('')
 
+
   const handleConvert = async () => {
     try {
       setConverting(true)
       setError('')
       setProgress(0)
       setDownloadUrl('')
-
+  
       // 调用Edge Function进行转换
       const { data, error } = await supabase.functions.invoke('convert-video', {
         body: { url, quality: parseInt(quality) }
       })
-
+  
       if (error) throw error
-
+  
       setDownloadUrl(data.downloadUrl)
       setProgress(100)
-
-} catch (err) {
-if (err instanceof Error) {
-  console.error('Conversion error:', err);
-  setError(err.message || '转换过程中发生错误');
-} else {
-  console.error('Unknown error:', err);
-  setError('转换过程中发生未知错误');
-}
-finally {
+    } catch (err: unknown) {
+      console.error('Conversion error:', err)
+      if (err instanceof FunctionsHttpError || err instanceof FunctionsRelayError) {
+        setError(err.message)
+      } else {
+        setError('转换过程中发生错误')
+      }
+    } finally {
       setConverting(false)
     }
   }
-
   return (
     <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
       <div className="relative py-3 sm:max-w-xl sm:mx-auto">
