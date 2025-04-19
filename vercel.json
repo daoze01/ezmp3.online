@@ -2,10 +2,12 @@
   "version": 2,
   "buildCommand": "cd ezmp3-frontend && npm install && npm run build",
   "outputDirectory": "ezmp3-frontend/dist",
+  "builds": [
+    { "src": "static/**", "use": "@vercel/static" },
+    { "src": "ezmp3-frontend/package.json", "use": "@vercel/static-build", "config": { "distDir": "dist" } }
+  ],
   "routes": [
-    { "handle": "filesystem" },
-    { "src": "/favicon.ico", "dest": "/favicon.ico" },
-    { "src": "/assets/(.*)", "dest": "/assets/$1" },
-    { "src": "/(.*)", "dest": "/index.html" }
+    { "src": "^/$", "dest": "/static/index.html" },
+    { "src": "^/ezmp3-frontend/(.*)", "dest": "/ezmp3-frontend/$1" }
   ]
 } 
