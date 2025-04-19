@@ -2,24 +2,9 @@
   "version": 2,
   "buildCommand": "cd ezmp3-frontend && npm install && npm run build",
   "outputDirectory": "ezmp3-frontend/dist",
-  "framework": "vite",
-  "trailingSlash": false,
-  "cleanUrls": true,
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
-      ]
-    },
-    {
-      "source": "/assets/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
-    }
-  ],
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/assets/(.*)", "dest": "/assets/$1" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 } 
