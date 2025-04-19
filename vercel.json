@@ -1,27 +1,8 @@
 {
-  "version": 2,
-  "headers": [
-    {
-      "source": "/src/main.tsx",
-      "headers": [
-        { "key": "Content-Type", "value": "text/javascript" }
-      ]
-    },
-    {
-      "source": "/(.*).js",
-      "headers": [
-        { "key": "Content-Type", "value": "text/javascript" }
-      ]
-    },
-    {
-      "source": "/(.*).css",
-      "headers": [
-        { "key": "Content-Type", "value": "text/css" }
-      ]
-    }
-  ],
+  "framework": "vite",
+  "buildCommand": "cd ezmp3-frontend && npm install && npm run build",
+  "outputDirectory": "ezmp3-frontend/dist",
   "rewrites": [
-    { "source": "/", "destination": "/static/index.html" },
-    { "source": "/(.*)", "destination": "/ezmp3-frontend/$1" }
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 } 
