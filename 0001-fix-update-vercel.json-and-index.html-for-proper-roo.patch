@@ -1,0 +1,59 @@
+From d6414fbd37045d1416747789922d2e25efd350ab Mon Sep 17 00:00:00 2001
+From: daoze01 <daodaozeze@hotmail.com>
+Date: Sat, 19 Apr 2025 20:04:40 +0800
+Subject: [PATCH] fix: update vercel.json and index.html for proper root path
+ deployment
+
+---
+ ezmp3-frontend/index.html |  1 +
+ vercel.json               | 22 ++++++++++++++++++----
+ 2 files changed, 19 insertions(+), 4 deletions(-)
+
+diff --git a/ezmp3-frontend/index.html b/ezmp3-frontend/index.html
+index 1e2f8e3..927e472 100644
+--- a/ezmp3-frontend/index.html
++++ b/ezmp3-frontend/index.html
+@@ -6,6 +6,7 @@
+     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     <title>EzMP3 - 在线视频转MP3</title>
+     <meta name="description" content="免费在线将YouTube视频转换为MP3音频文件" />
++    <base href="/" />
+   </head>
+   <body>
+     <div id="root"></div>
+diff --git a/vercel.json b/vercel.json
+index b0523b9..c9774ad 100644
+--- a/vercel.json
++++ b/vercel.json
+@@ -3,9 +3,23 @@
+   "buildCommand": "cd ezmp3-frontend && npm install && npm run build",
+   "outputDirectory": "ezmp3-frontend/dist",
+   "framework": "vite",
+-  "routes": [
+-    { "handle": "filesystem" },
+-    { "src": "/assets/(.*)", "dest": "/assets/$1" },
+-    { "src": "/(.*)", "dest": "/index.html" }
++  "trailingSlash": false,
++  "cleanUrls": true,
++  "headers": [
++    {
++      "source": "/(.*)",
++      "headers": [
++        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
++      ]
++    },
++    {
++      "source": "/assets/(.*)",
++      "headers": [
++        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
++      ]
++    }
++  ],
++  "rewrites": [
++    { "source": "/(.*)", "destination": "/index.html" }
+   ]
+ } 
+\ No newline at end of file
+-- 
+2.47.1.windows.1
+

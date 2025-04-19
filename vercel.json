@@ -2,10 +2,9 @@
   "version": 2,
   "buildCommand": "cd ezmp3-frontend && npm install && npm run build",
   "outputDirectory": "ezmp3-frontend/dist",
+  "cleanUrls": true,
   "routes": [
-    { "src": "^/ezmp3-frontend/(.*)", "dest": "/ezmp3-frontend/$1" },
-    { "src": "^/assets/(.*)", "dest": "/ezmp3-frontend/assets/$1" },
-    { "src": "^/$", "dest": "/index.html" },
-    { "src": "^/(.*)", "dest": "/ezmp3-frontend/$1" }
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 } 
