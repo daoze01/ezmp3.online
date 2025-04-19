@@ -32,13 +32,9 @@ function App() {
   
       setDownloadUrl(data.downloadUrl)
       setProgress(100)
-    } catch (err: unknown) {
+    } catch (err: any) {
       console.error('Conversion error:', err)
-      if (err instanceof FunctionsHttpError || err instanceof FunctionsRelayError) {
-        setError(err.message)
-      } else {
-        setError('转换过程中发生错误')
-      }
+      setError(err?.message || '转换过程中发生错误')
     } finally {
       setConverting(false)
     }
