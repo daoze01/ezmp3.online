@@ -1,35 +1,62 @@
+// EzMP3在线视频转MP3应用
 import { useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
 
-// 初始化Supabase客户端
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY
-)
+// 创建Supabase客户端
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+const supabase = createClient(supabaseUrl, supabaseKey)
+
+// 安全URL验证函数
+function safeURL(url: string): string {
+  if (!url || !url.trim() || !url.startsWith('http')) {
+    throw new Error('请输入有效的 URL');
+  }
+
+  try {
+    const urlObj = new URL(url);
+    const host = urlObj.hostname.toLowerCase();
+    if (host.includes('youtube.com') || host.includes('youtu.be')) {
+      return url;
+    } else {
+      throw new Error('只支持 YouTube 视频链接');
+    }
+  } catch (err) {
+    throw new Error('无效的 URL');
+  }
+}
 
 function App() {
   const [url, setUrl] = useState('')
-  const [quality, setQuality] = useState('128')
+  const [quality, setQuality] = useState('192')
   const [converting, setConverting] = useState(false)
   const [error, setError] = useState('')
   const [progress, setProgress] = useState(0)
   const [downloadUrl, setDownloadUrl] = useState('')
 
-
   const handleConvert = async () => {
     try {
+      // 添加额外验证
+      if (!url || !url.trim() || !url.startsWith('http')) {
+        setError('请输入有效的 YouTube 链接');
+        return;
+      }
+
       setConverting(true)
       setError('')
       setProgress(0)
       setDownloadUrl('')
-  
+
+      // 使用安全的URL验证
+      const safeVideoUrl = safeURL(url);
+      
       // 调用Edge Function进行转换
       const { data, error } = await supabase.functions.invoke('convert-video', {
-        body: { url, quality: parseInt(quality) }
+        body: { url: safeVideoUrl, quality: parseInt(quality) }
       })
-  
+
       if (error) throw error
-  
+
       setDownloadUrl(data.downloadUrl)
       setProgress(100)
     } catch (err: any) {
@@ -39,6 +66,7 @@ function App() {
       setConverting(false)
     }
   }
+
   return (
     <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
       <div className="relative py-3 sm:max-w-xl sm:mx-auto">
@@ -85,9 +113,9 @@ function App() {
 
                 <button
                   onClick={handleConvert}
-                  disabled={converting || !url}
+                  disabled={converting || !url || !url.startsWith('http')}
                   className={`w-full py-2 px-4 rounded ${
-                    converting || !url
+                    converting || !url || !url.startsWith('http')
                       ? 'bg-gray-400 cursor-not-allowed'
                       : 'bg-blue-500 hover:bg-blue-700'
                   } text-white font-bold`}
