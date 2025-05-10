@@ -1,103 +1,71 @@
-import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <>
+      {/* Header */}
+      <header className="bg-white shadow-sm">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+          <span className="text-2xl font-bold text-blue-600">ezMP3</span>
+          <nav className="space-x-6">
+            <a href="#" className="text-gray-600 hover:text-blue-600">Home</a>
+            <a href="#features" className="text-gray-600 hover:text-blue-600">Features</a>
+            <a href="#footer" className="text-gray-600 hover:text-blue-600">Contact</a>
+          </nav>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+      </header>
+
+      {/* Hero Section */}
+      <section className="max-w-3xl mx-auto px-4 py-16 text-center">
+        <h2 className="text-4xl md:text-5xl font-extrabold mb-4 text-gray-900">Convert YouTube Videos to MP3 in Seconds</h2>
+        <p className="text-lg md:text-xl text-gray-600 mb-8">Fast, free, and secure MP3 downloads without registration.</p>
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-2">
+          <input
+            id="videoUrl"
+            type="url"
+            placeholder="Paste YouTube video URL"
+            className="w-full max-w-xl px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base"
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+          <button
+            id="convertBtn"
+            className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition w-full sm:w-auto"
+          >
+            Convert
+          </button>
+        </div>
+      </section>
+
+      {/* Features */}
+      <section id="features" className="bg-white py-16">
+        <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="text-center">
+            <h3 className="text-2xl font-semibold mb-2 text-gray-900">High Quality</h3>
+            <p className="text-gray-600">Get crystal-clear MP3 files at your desired bitrate.</p>
+          </div>
+          <div className="text-center">
+            <h3 className="text-2xl font-semibold mb-2 text-gray-900">No Ads</h3>
+            <p className="text-gray-600">Enjoy a clean interface without annoying pop-ups.</p>
+          </div>
+          <div className="text-center">
+            <h3 className="text-2xl font-semibold mb-2 text-gray-900">100% Free</h3>
+            <p className="text-gray-600">No subscriptions or hidden fees—ever.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer id="footer" className="bg-gray-800 text-gray-400 py-8 mt-8">
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          <p>&copy; 2025 ezMP3. All rights reserved.</p>
+          <p className="mt-2 space-x-2">
+            <a href="/privacy" className="hover:text-white underline">Privacy Policy</a>
+            <span>·</span>
+            <a href="/terms" className="hover:text-white underline">Terms of Service</a>
+          </p>
+        </div>
       </footer>
-    </div>
+    </>
   );
 }
