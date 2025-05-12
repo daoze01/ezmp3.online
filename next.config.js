@@ -1,10 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  distDir: 'dist',
-  output: 'export',
-  images: {
-    unoptimized: true
-  }
+  // 保持默认配置
 }
 
 module.exports = nextConfig 
