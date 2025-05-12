@@ -1,6 +1,4 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  // 保持默认配置
-}
+const nextConfig = {}
 
 module.exports = nextConfig 
