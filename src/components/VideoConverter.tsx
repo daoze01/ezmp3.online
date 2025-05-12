@@ -9,7 +9,7 @@ export default function VideoConverter() {
     try {
       new URL(url);
       // 处理转换逻辑
-    } catch (error) {
+    } catch (_) {
       console.error('Invalid URL');
     }
   };
