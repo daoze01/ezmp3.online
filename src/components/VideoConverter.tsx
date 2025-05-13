@@ -7,10 +7,14 @@ export default function VideoConverter() {
 
   const handleConvert = () => {
     try {
-      new URL(url);
-      // 处理转换逻辑
+      if (url) {
+        const validUrl = new URL(url);
+        console.log('Processing URL:', validUrl.toString());
+        // 处理转换逻辑
+      }
+    // 不使用任何捕获变量
     } catch {
-      console.error('Invalid URL');
+      console.error('无效URL');
     }
   };
 

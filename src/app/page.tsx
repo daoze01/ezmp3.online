@@ -1,3 +1,5 @@
+import VideoConverter from '@/components/VideoConverter';
+
 export default function Home() {
   return (
     <>
@@ -17,20 +19,7 @@ export default function Home() {
       <section className="max-w-3xl mx-auto px-4 py-16 text-center">
         <h2 className="text-4xl md:text-5xl font-extrabold mb-4 text-gray-900">Convert YouTube Videos to MP3 in Seconds</h2>
         <p className="text-lg md:text-xl text-gray-600 mb-8">Fast, free, and secure MP3 downloads without registration.</p>
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-2">
-          <input
-            id="videoUrl"
-            type="url"
-            placeholder="Paste YouTube video URL"
-            className="w-full max-w-xl px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base"
-          />
-          <button
-            id="convertBtn"
-            className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition w-full sm:w-auto"
-          >
-            Convert
-          </button>
-        </div>
+        <VideoConverter />
       </section>
 
       {/* Features */}
