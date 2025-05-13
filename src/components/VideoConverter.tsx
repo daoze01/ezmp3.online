@@ -12,7 +12,6 @@ export default function VideoConverter() {
         console.log('Processing URL:', validUrl.toString());
         // 处理转换逻辑
       }
-    // 不使用任何捕获变量
     } catch {
       console.error('无效URL');
     }
