@@ -12,7 +12,8 @@ export default function VideoConverter() {
         console.log('Processing URL:', validUrl.toString());
         // 处理转换逻辑
       }
-    } catch {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
       console.error('无效URL');
     }
   };
