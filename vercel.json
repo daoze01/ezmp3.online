@@ -1,4 +1,15 @@
 {
-  "buildCommand": "next build --no-lint",
-  "framework": "nextjs"
-} 
+  "version": 2,
+  "builds": [
+    {
+      "src": "src/main.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "src/main.py"
+    }
+  ]
+}

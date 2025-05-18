@@ -1,0 +1,627 @@
+{% extends "base.html" %}
+
+{% block title %}免费视频下载工具 | 支持多平台高清视频下载{% endblock %}
+{% block description %}使用我们的免费视频下载工具，轻松下载YouTube、Bilibili等平台的高清视频。无需注册，快速安全。{% endblock %}
+{% block canonical %}https://example.com/download{% endblock %}
+
+{% block extra_head %}
+<!-- 下载页面特定的结构化数据 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "视频下载工具",
+  "applicationCategory": "MultimediaApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "operatingSystem": "Web"
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- 页面标题 -->
+<section class="page-header py-5 bg-primary text-white">
+    <div class="container">
+        <h1 class="display-5 fw-bold">免费视频下载工具</h1>
+        <p class="lead">从YouTube、Bilibili等多个平台下载高清视频，无需安装软件，快速简便。</p>
+    </div>
+</section>
+
+<!-- 广告位 -->
+<div class="container my-4 text-center">
+    <div class="ad-container">
+        <!-- 广告代码将在这里 -->
+        <div class="py-3 bg-light rounded">
+            <p class="mb-0 text-muted">广告位 - 顶部横幅</p>
+        </div>
+    </div>
+</div>
+
+<!-- 下载功能区域 -->
+<section class="download-section py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- 视频下载表单 -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body p-4">
+                        <h2 class="h3 mb-4">下载视频</h2>
+                        <form id="video-download-form">
+                            <div class="mb-3">
+                                <label for="video-url" class="form-label">视频链接</label>
+                                <input type="url" class="form-control form-control-lg" id="video-url" placeholder="https://www.youtube.com/watch?v=..." required>
+                                <div class="form-text">支持YouTube、Bilibili、Vimeo等多个平台</div>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg" id="fetch-video-btn">获取视频信息</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- 视频信息和下载选项 -->
+                <div class="card shadow-sm mb-4 d-none" id="video-info-card">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-4">
+                            <h2 class="h3 mb-0">视频信息</h2>
+                            <button type="button" class="btn-close" id="close-video-info"></button>
+                        </div>
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-4 mb-3 mb-md-0">
+                                <img src="" alt="视频缩略图" class="img-fluid rounded" id="video-thumbnail">
+                            </div>
+                            <div class="col-md-8">
+                                <h3 class="h5 mb-2" id="video-title"></h3>
+                                <p class="mb-1"><strong>上传者:</strong> <span id="video-uploader"></span></p>
+                                <p class="mb-1"><strong>时长:</strong> <span id="video-duration"></span></p>
+                                <p class="mb-0"><strong>观看次数:</strong> <span id="video-views"></span></p>
+                            </div>
+                        </div>
+                        
+                        <h3 class="h5 mb-3">可用格式</h3>
+                        <div class="table-responsive mb-4">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>质量</th>
+                                        <th>格式</th>
+                                        <th>分辨率</th>
+                                        <th>文件大小</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="formats-table">
+                                    <!-- 格式列表将通过JavaScript动态填充 -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn btn-outline-primary" id="convert-to-mp3-btn">转换为MP3</button>
+                            <button type="button" class="btn btn-primary" id="download-best-btn">下载最佳质量</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 下载进度 -->
+                <div class="card shadow-sm mb-4 d-none" id="download-progress-card">
+                    <div class="card-body p-4">
+                        <h2 class="h3 mb-4">下载进度</h2>
+                        <div class="progress mb-3">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" id="download-progress-bar"></div>
+                        </div>
+                        <p class="mb-0" id="download-status">准备下载...</p>
+                    </div>
+                </div>
+
+                <!-- 下载完成 -->
+                <div class="card shadow-sm mb-4 d-none" id="download-complete-card">
+                    <div class="card-body p-4">
+                        <div class="text-center mb-4">
+                            <i class="bi bi-check-circle-fill text-success display-1"></i>
+                            <h2 class="h3 mt-3">下载完成</h2>
+                            <p class="mb-4">您的文件已准备好，点击下方按钮下载</p>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <a href="#" class="btn btn-primary btn-lg" id="download-file-btn" download>下载文件</a>
+                            <button type="button" class="btn btn-outline-primary" id="convert-downloaded-to-mp3-btn">转换为MP3</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <!-- 侧边栏广告 -->
+                <div class="ad-container mb-4">
+                    <!-- 广告代码将在这里 -->
+                    <div class="py-5 bg-light rounded text-center">
+                        <p class="mb-0 text-muted">广告位 - 侧边栏</p>
+                    </div>
+                </div>
+                
+                <!-- 最近下载 -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white">
+                        <h3 class="h5 mb-0">最近下载</h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush" id="recent-downloads">
+                            <!-- 最近下载列表将通过JavaScript动态填充 -->
+                            <li class="list-group-item text-center text-muted py-4">暂无下载记录</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- 相关教程 -->
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white">
+                        <h3 class="h5 mb-0">相关教程</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <a href="/tutorials/youtube" class="text-decoration-none">
+                                    <i class="bi bi-arrow-right-circle me-2"></i>如何下载YouTube视频
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="/tutorials/bilibili" class="text-decoration-none">
+                                    <i class="bi bi-arrow-right-circle me-2"></i>如何下载Bilibili视频
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="/tutorials/mp3-conversion" class="text-decoration-none">
+                                    <i class="bi bi-arrow-right-circle me-2"></i>视频转MP3最佳实践
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/tutorials" class="text-decoration-none">
+                                    <i class="bi bi-arrow-right-circle me-2"></i>查看所有教程
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 广告位 -->
+<div class="container my-4 text-center">
+    <div class="ad-container">
+        <!-- 广告代码将在这里 -->
+        <div class="py-3 bg-light rounded">
+            <p class="mb-0 text-muted">广告位 - 底部横幅</p>
+        </div>
+    </div>
+</div>
+
+<!-- 常见问题 -->
+<section class="faq-section py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">常见问题</h2>
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="accordion" id="downloadFaq">
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="true" aria-controls="faq1">
+                                支持哪些视频平台？
+                            </button>
+                        </h3>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#downloadFaq">
+                            <div class="accordion-body">
+                                我们的工具支持多个主流视频平台，包括但不限于YouTube、Bilibili、Vimeo、Dailymotion、Facebook等。只需复制视频链接，我们的系统会自动识别并处理。
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false" aria-controls="faq2">
+                                下载视频是否合法？
+                            </button>
+                        </h3>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#downloadFaq">
+                            <div class="accordion-body">
+                                下载视频的合法性取决于多种因素，包括您所在国家/地区的法律、视频平台的服务条款以及您的使用目的。通常，下载视频用于个人非商业用途（如离线观看）在许多地区被视为合理使用。但我们建议您尊重版权，不要分发或用于商业目的。
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">
+                                为什么有些视频无法下载？
+                            </button>
+                        </h3>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#downloadFaq">
+                            <div class="accordion-body">
+                                某些视频可能无法下载的原因包括：视频设置了特殊的保护措施、平台更新了防下载机制、视频是付费内容或需要会员资格、地区限制等。我们会不断更新我们的工具以适应平台变化，但无法保证所有视频都能成功下载。
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" aria-expanded="false" aria-controls="faq4">
+                                下载的视频质量如何？
+                            </button>
+                        </h3>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#downloadFaq">
+                            <div class="accordion-body">
+                                我们的工具会提供视频原始可用的所有质量选项，从低分辨率到高清甚至4K（如果原视频支持）。您可以根据自己的需求和网络条件选择合适的质量。通常，更高的质量意味着更大的文件大小和更长的下载时间。
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5" aria-expanded="false" aria-controls="faq5">
+                                下载的文件会保存在哪里？
+                            </button>
+                        </h3>
+                        <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#downloadFaq">
+                            <div class="accordion-body">
+                                下载的文件会直接保存到您的设备上，具体位置取决于您的浏览器设置。通常，文件会保存在您的"下载"文件夹中，或者浏览器会提示您选择保存位置。我们的服务器不会永久存储您下载的文件，所有文件会在短时间后自动删除。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 行动召唤 -->
+<section class="cta-section py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="mb-4">还想了解更多功能？</h2>
+        <p class="lead mb-4">尝试我们的视频转MP3功能或批量处理工具</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="/convert" class="btn btn-light btn-lg">视频转MP3</a>
+            <a href="/batch" class="btn btn-outline-light btn-lg">批量处理</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 获取URL参数
+    const urlParams = new URLSearchParams(window.location.search);
+    const videoUrl = urlParams.get('url');
+    
+    // 如果URL中包含视频链接，自动填充并获取信息
+    if (videoUrl) {
+        document.getElementById('video-url').value = videoUrl;
+        fetchVideoInfo(videoUrl);
+    }
+    
+    // 表单提交处理
+    const downloadForm = document.getElementById('video-download-form');
+    downloadForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const videoUrl = document.getElementById('video-url').value;
+        fetchVideoInfo(videoUrl);
+    });
+    
+    // 关闭视频信息卡片
+    document.getElementById('close-video-info').addEventListener('click', function() {
+        document.getElementById('video-info-card').classList.add('d-none');
+    });
+    
+    // 转换为MP3按钮
+    document.getElementById('convert-to-mp3-btn').addEventListener('click', function() {
+        window.location.href = `/convert?url=${encodeURIComponent(document.getElementById('video-url').value)}`;
+    });
+    
+    // 下载已下载视频的MP3版本
+    document.getElementById('convert-downloaded-to-mp3-btn').addEventListener('click', function() {
+        // 这里将使用存储在本地的文件ID和文件名
+        const fileId = localStorage.getItem('lastDownloadFileId');
+        const fileName = localStorage.getItem('lastDownloadFileName');
+        
+        if (fileId && fileName) {
+            convertToMp3(fileId, fileName);
+        }
+    });
+    
+    // 加载最近下载
+    loadRecentDownloads();
+});
+
+// 获取视频信息
+function fetchVideoInfo(videoUrl) {
+    // 显示加载状态
+    document.getElementById('fetch-video-btn').disabled = true;
+    document.getElementById('fetch-video-btn').innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> 获取中...';
+    
+    // 调用API获取视频信息
+    fetch('/api/info', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url: videoUrl }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert('获取视频信息失败: ' + data.error);
+            return;
+        }
+        
+        // 填充视频信息
+        document.getElementById('video-thumbnail').src = data.thumbnail;
+        document.getElementById('video-title').textContent = data.title;
+        document.getElementById('video-uploader').textContent = data.uploader || '未知';
+        document.getElementById('video-duration').textContent = formatDuration(data.duration);
+        document.getElementById('video-views').textContent = formatNumber(data.view_count);
+        
+        // 填充格式表格
+        const formatsTable = document.getElementById('formats-table');
+        formatsTable.innerHTML = '';
+        
+        if (data.formats && data.formats.length > 0) {
+            data.formats.forEach(format => {
+                const row = document.createElement('tr');
+                
+                // 质量
+                const qualityCell = document.createElement('td');
+                qualityCell.textContent = format.format_note || '标准';
+                row.appendChild(qualityCell);
+                
+                // 格式
+                const formatCell = document.createElement('td');
+                formatCell.textContent = format.ext || '-';
+                row.appendChild(formatCell);
+                
+                // 分辨率
+                const resolutionCell = document.createElement('td');
+                if (format.height && format.width) {
+                    resolutionCell.textContent = `${format.width}x${format.height}`;
+                } else {
+                    resolutionCell.textContent = '-';
+                }
+                row.appendChild(resolutionCell);
+                
+                // 文件大小
+                const sizeCell = document.createElement('td');
+                sizeCell.textContent = format.filesize ? formatFileSize(format.filesize) : '未知';
+                row.appendChild(sizeCell);
+                
+                // 操作按钮
+                const actionCell = document.createElement('td');
+                const downloadBtn = document.createElement('button');
+                downloadBtn.className = 'btn btn-sm btn-primary';
+                downloadBtn.textContent = '下载';
+                downloadBtn.addEventListener('click', function() {
+                    downloadVideo(videoUrl, format.format_id);
+                });
+                actionCell.appendChild(downloadBtn);
+                row.appendChild(actionCell);
+                
+                formatsTable.appendChild(row);
+            });
+        } else {
+            const row = document.createElement('tr');
+            const cell = document.createElement('td');
+            cell.colSpan = 5;
+            cell.textContent = '没有可用的格式信息';
+            cell.className = 'text-center';
+            row.appendChild(cell);
+            formatsTable.appendChild(row);
+        }
+        
+        // 最佳质量下载按钮
+        document.getElementById('download-best-btn').addEventListener('click', function() {
+            downloadVideo(videoUrl, 'best');
+        });
+        
+        // 显示视频信息卡片
+        document.getElementById('video-info-card').classList.remove('d-none');
+        
+        // 重置按钮状态
+        document.getElementById('fetch-video-btn').disabled = false;
+        document.getElementById('fetch-video-btn').textContent = '获取视频信息';
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('获取视频信息时发生错误，请稍后再试');
+        
+        // 重置按钮状态
+        document.getElementById('fetch-video-btn').disabled = false;
+        document.getElementById('fetch-video-btn').textContent = '获取视频信息';
+    });
+}
+
+// 下载视频
+function downloadVideo(videoUrl, formatId) {
+    // 隐藏视频信息卡片
+    document.getElementById('video-info-card').classList.add('d-none');
+    
+    // 显示下载进度卡片
+    document.getElementById('download-progress-card').classList.remove('d-none');
+    document.getElementById('download-status').textContent = '正在下载视频...';
+    
+    // 模拟进度条（实际应用中应使用WebSocket或轮询获取真实进度）
+    let progress = 0;
+    const progressBar = document.getElementById('download-progress-bar');
+    const progressInterval = setInterval(() => {
+        progress += 5;
+        if (progress > 90) {
+            clearInterval(progressInterval);
+        }
+        progressBar.style.width = `${progress}%`;
+    }, 500);
+    
+    // 调用API下载视频
+    fetch('/api/download', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+            url: videoUrl,
+            format_id: formatId
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        clearInterval(progressInterval);
+        
+        if (data.error) {
+            alert('下载视频失败: ' + data.error);
+            document.getElementById('download-progress-card').classList.add('d-none');
+            return;
+        }
+        
+        // 设置进度条为100%
+        progressBar.style.width = '100%';
+        document.getElementById('download-status').textContent = '下载完成！';
+        
+        // 隐藏进度卡片，显示完成卡片
+        setTimeout(() => {
+            document.getElementById('download-progress-card').classList.add('d-none');
+            document.getElementById('download-complete-card').classList.remove('d-none');
+            
+            // 设置下载链接
+            const downloadBtn = document.getElementById('download-file-btn');
+            downloadBtn.href = data.download_url;
+            downloadBtn.download = data.filename;
+            
+            // 保存下载信息到本地存储
+            saveDownloadToHistory(data.file_id, data.filename, videoUrl);
+            
+            // 更新最近下载列表
+            loadRecentDownloads();
+        }, 1000);
+    })
+    .catch(error => {
+        clearInterval(progressInterval);
+        console.error('Error:', error);
+        alert('下载视频时发生错误，请稍后再试');
+        document.getElementById('download-progress-card').classList.add('d-none');
+    });
+}
+
+// 转换为MP3
+function convertToMp3(fileId, fileName) {
+    // 重定向到转换页面
+    window.location.href = `/convert?file_id=${fileId}&filename=${encodeURIComponent(fileName)}`;
+}
+
+// 保存下载历史
+function saveDownloadToHistory(fileId, fileName, videoUrl) {
+    // 获取现有历史
+    let history = JSON.parse(localStorage.getItem('downloadHistory') || '[]');
+    
+    // 添加新项目
+    history.unshift({
+        fileId: fileId,
+        fileName: fileName,
+        videoUrl: videoUrl,
+        timestamp: Date.now()
+    });
+    
+    // 限制历史记录数量
+    if (history.length > 10) {
+        history = history.slice(0, 10);
+    }
+    
+    // 保存回本地存储
+    localStorage.setItem('downloadHistory', JSON.stringify(history));
+    
+    // 保存最后一次下载的文件信息（用于转换为MP3）
+    localStorage.setItem('lastDownloadFileId', fileId);
+    localStorage.setItem('lastDownloadFileName', fileName);
+}
+
+// 加载最近下载
+function loadRecentDownloads() {
+    const history = JSON.parse(localStorage.getItem('downloadHistory') || '[]');
+    const container = document.getElementById('recent-downloads');
+    
+    if (history.length === 0) {
+        container.innerHTML = '<li class="list-group-item text-center text-muted py-4">暂无下载记录</li>';
+        return;
+    }
+    
+    container.innerHTML = '';
+    
+    history.forEach(item => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item';
+        
+        const fileName = document.createElement('p');
+        fileName.className = 'mb-1 text-truncate';
+        fileName.title = item.fileName;
+        fileName.textContent = item.fileName;
+        
+        const actions = document.createElement('div');
+        actions.className = 'd-flex gap-2';
+        
+        const downloadLink = document.createElement('a');
+        downloadLink.href = `/api/file/${item.fileId}/${item.fileName}`;
+        downloadLink.className = 'btn btn-sm btn-outline-primary';
+        downloadLink.textContent = '下载';
+        downloadLink.download = item.fileName;
+        
+        const convertBtn = document.createElement('button');
+        convertBtn.className = 'btn btn-sm btn-outline-secondary';
+        convertBtn.textContent = '转MP3';
+        convertBtn.addEventListener('click', function() {
+            convertToMp3(item.fileId, item.fileName);
+        });
+        
+        actions.appendChild(downloadLink);
+        actions.appendChild(convertBtn);
+        
+        li.appendChild(fileName);
+        li.appendChild(actions);
+        container.appendChild(li);
+    });
+}
+
+// 格式化时长
+function formatDuration(seconds) {
+    if (!seconds) return '未知';
+    
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    
+    if (hours > 0) {
+        return `${hours}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    } else {
+        return `${minutes}:${secs.toString().padStart(2, '0')}`;
+    }
+}
+
+// 格式化数字
+function formatNumber(num) {
+    if (!num) return '0';
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+// 格式化文件大小
+function formatFileSize(bytes) {
+    if (!bytes) return '未知';
+    
+    const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+    let size = bytes;
+    let unitIndex = 0;
+    
+    while (size >= 1024 && unitIndex < units.length - 1) {
+        size /= 1024;
+        unitIndex++;
+    }
+    
+    return `${size.toFixed(2)} ${units[unitIndex]}`;
+}
+</script>
+{% endblock %}
