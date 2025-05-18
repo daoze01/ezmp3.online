@@ -1,0 +1,801 @@
+{% extends "base.html" %}
+
+{% block title %}视频转MP3工具 | 在线提取视频音频{% endblock %}
+{% block description %}将视频转换为MP3格式，提取高质量音频。支持多种视频格式，快速转换，免费下载。{% endblock %}
+{% block canonical %}https://example.com/convert{% endblock %}
+
+{% block extra_head %}
+<!-- 转换页面特定的结构化数据 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "视频转MP3工具",
+  "applicationCategory": "MultimediaApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "operatingSystem": "Web"
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- 页面标题 -->
+<section class="page-header py-5 bg-primary text-white">
+    <div class="container">
+        <h1 class="display-5 fw-bold">视频转MP3工具</h1>
+        <p class="lead">轻松将视频转换为MP3格式，提取高质量音频。支持多种视频格式，快速转换。</p>
+    </div>
+</section>
+
+<!-- 广告位 -->
+<div class="container my-4 text-center">
+    <div class="ad-container">
+        <!-- 广告代码将在这里 -->
+        <div class="py-3 bg-light rounded">
+            <p class="mb-0 text-muted">广告位 - 顶部横幅</p>
+        </div>
+    </div>
+</div>
+
+<!-- 转换功能区域 -->
+<section class="convert-section py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- 转换选项卡 -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white">
+                        <ul class="nav nav-tabs card-header-tabs" id="convertTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="url-tab" data-bs-toggle="tab" data-bs-target="#url-panel" type="button" role="tab" aria-controls="url-panel" aria-selected="true">从URL转换</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload-panel" type="button" role="tab" aria-controls="upload-panel" aria-selected="false">上传视频转换</button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="tab-content" id="convertTabContent">
+                            <!-- 从URL转换 -->
+                            <div class="tab-pane fade show active" id="url-panel" role="tabpanel" aria-labelledby="url-tab">
+                                <h2 class="h4 mb-4">从视频链接转换为MP3</h2>
+                                <form id="url-convert-form">
+                                    <div class="mb-3">
+                                        <label for="video-url" class="form-label">视频链接</label>
+                                        <input type="url" class="form-control form-control-lg" id="video-url" placeholder="https://www.youtube.com/watch?v=..." required>
+                                        <div class="form-text">支持YouTube、Bilibili、Vimeo等多个平台</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">音频质量</label>
+                                        <div class="d-flex gap-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="audio-quality" id="quality-128" value="128" checked>
+                                                <label class="form-check-label" for="quality-128">
+                                                    标准 (128kbps)
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="audio-quality" id="quality-192" value="192">
+                                                <label class="form-check-label" for="quality-192">
+                                                    高质量 (192kbps)
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="audio-quality" id="quality-320" value="320">
+                                                <label class="form-check-label" for="quality-320">
+                                                    超高质量 (320kbps)
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary btn-lg" id="url-convert-btn">转换为MP3</button>
+                                    </div>
+                                </form>
+                            </div>
+                            
+                            <!-- 上传视频转换 -->
+                            <div class="tab-pane fade" id="upload-panel" role="tabpanel" aria-labelledby="upload-tab">
+                                <h2 class="h4 mb-4">上传视频转换为MP3</h2>
+                                <form id="upload-convert-form">
+                                    <div class="mb-3">
+                                        <label for="video-file" class="form-label">选择视频文件</label>
+                                        <input type="file" class="form-control form-control-lg" id="video-file" accept=".mp4,.webm,.mkv,.avi,.mov,.flv" required>
+                                        <div class="form-text">支持MP4、WebM、MKV、AVI、MOV、FLV格式，最大文件大小500MB</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">音频质量</label>
+                                        <div class="d-flex gap-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="upload-audio-quality" id="upload-quality-128" value="128" checked>
+                                                <label class="form-check-label" for="upload-quality-128">
+                                                    标准 (128kbps)
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="upload-audio-quality" id="upload-quality-192" value="192">
+                                                <label class="form-check-label" for="upload-quality-192">
+                                                    高质量 (192kbps)
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="upload-audio-quality" id="upload-quality-320" value="320">
+                                                <label class="form-check-label" for="upload-quality-320">
+                                                    超高质量 (320kbps)
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary btn-lg" id="upload-convert-btn">上传并转换</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 转换进度 -->
+                <div class="card shadow-sm mb-4 d-none" id="convert-progress-card">
+                    <div class="card-body p-4">
+                        <h2 class="h4 mb-4">转换进度</h2>
+                        <div class="progress mb-3">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" id="convert-progress-bar"></div>
+                        </div>
+                        <p class="mb-0" id="convert-status">准备转换...</p>
+                    </div>
+                </div>
+
+                <!-- 转换完成 -->
+                <div class="card shadow-sm mb-4 d-none" id="convert-complete-card">
+                    <div class="card-body p-4">
+                        <div class="text-center mb-4">
+                            <i class="bi bi-music-note-beamed text-success display-1"></i>
+                            <h2 class="h3 mt-3">转换完成</h2>
+                            <p class="mb-4">您的MP3文件已准备好，点击下方按钮下载</p>
+                        </div>
+                        <div class="d-grid">
+                            <a href="#" class="btn btn-primary btn-lg" id="download-mp3-btn" download>下载MP3</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 音频预览 -->
+                <div class="card shadow-sm mb-4 d-none" id="audio-preview-card">
+                    <div class="card-body p-4">
+                        <h2 class="h4 mb-3">音频预览</h2>
+                        <div class="audio-player mb-3">
+                            <audio controls class="w-100" id="audio-preview">
+                                <source src="" type="audio/mpeg">
+                                您的浏览器不支持音频播放。
+                            </audio>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn btn-outline-primary" id="convert-another-btn">转换另一个</button>
+                            <a href="#" class="btn btn-primary" id="download-preview-btn" download>下载MP3</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <!-- 侧边栏广告 -->
+                <div class="ad-container mb-4">
+                    <!-- 广告代码将在这里 -->
+                    <div class="py-5 bg-light rounded text-center">
+                        <p class="mb-0 text-muted">广告位 - 侧边栏</p>
+                    </div>
+                </div>
+                
+                <!-- 最近转换 -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white">
+                        <h3 class="h5 mb-0">最近转换</h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush" id="recent-conversions">
+                            <!-- 最近转换列表将通过JavaScript动态填充 -->
+                            <li class="list-group-item text-center text-muted py-4">暂无转换记录</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- 相关教程 -->
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white">
+                        <h3 class="h5 mb-0">相关教程</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <a href="/tutorials/mp3-conversion" class="text-decoration-none">
+                                    <i class="bi bi-arrow-right-circle me-2"></i>视频转MP3最佳实践
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="/tutorials/audio-quality" class="text-decoration-none">
+                                    <i class="bi bi-arrow-right-circle me-2"></i>如何选择合适的音频质量
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="/tutorials/audio-formats" class="text-decoration-none">
+                                    <i class="bi bi-arrow-right-circle me-2"></i>音频格式对比：MP3 vs AAC vs FLAC
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/tutorials" class="text-decoration-none">
+                                    <i class="bi bi-arrow-right-circle me-2"></i>查看所有教程
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 广告位 -->
+<div class="container my-4 text-center">
+    <div class="ad-container">
+        <!-- 广告代码将在这里 -->
+        <div class="py-3 bg-light rounded">
+            <p class="mb-0 text-muted">广告位 - 底部横幅</p>
+        </div>
+    </div>
+</div>
+
+<!-- 功能特点 -->
+<section class="features-section py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">为什么选择我们的MP3转换工具</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-primary text-white rounded-circle mb-3 mx-auto">
+                            <i class="bi bi-speedometer2"></i>
+                        </div>
+                        <h3 class="h5 mb-3">快速转换</h3>
+                        <p class="mb-0">采用高效算法，快速提取音频，无需等待漫长的处理时间。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-primary text-white rounded-circle mb-3 mx-auto">
+                            <i class="bi bi-music-note"></i>
+                        </div>
+                        <h3 class="h5 mb-3">高质量音频</h3>
+                        <p class="mb-0">支持多种音质选项，从标准到超高质量，满足不同需求。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-primary text-white rounded-circle mb-3 mx-auto">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h3 class="h5 mb-3">安全可靠</h3>
+                        <p class="mb-0">所有文件在转换后短时间内自动删除，保护您的隐私和数据安全。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 常见问题 -->
+<section class="faq-section py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">常见问题</h2>
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="accordion" id="convertFaq">
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="true" aria-controls="faq1">
+                                转换后的MP3音质如何？
+                            </button>
+                        </h3>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#convertFaq">
+                            <div class="accordion-body">
+                                我们提供三种音质选项：标准(128kbps)、高质量(192kbps)和超高质量(320kbps)。音质越高，文件大小也越大。对于大多数用途，192kbps提供了良好的平衡，而320kbps则适合对音质有较高要求的场景。音质的最终效果也取决于原始视频的音频质量。
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false" aria-controls="faq2">
+                                支持哪些视频格式转换为MP3？
+                            </button>
+                        </h3>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#convertFaq">
+                            <div class="accordion-body">
+                                我们支持几乎所有常见的视频格式，包括但不限于MP4、WebM、MKV、AVI、MOV、FLV等。对于在线视频，我们支持从YouTube、Bilibili、Vimeo等多个平台提取音频。如果您遇到不支持的格式，请联系我们，我们会尽快添加支持。
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">
+                                转换过程需要多长时间？
+                            </button>
+                        </h3>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#convertFaq">
+                            <div class="accordion-body">
+                                转换时间取决于多个因素，包括视频长度、原始格式、服务器负载等。通常，几分钟的视频可以在几秒到几十秒内完成转换。对于较长的视频，可能需要更多时间。我们的系统会优化处理流程，尽可能减少等待时间。
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" aria-expanded="false" aria-controls="faq4">
+                                转换后的文件会保存多久？
+                            </button>
+                        </h3>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#convertFaq">
+                            <div class="accordion-body">
+                                出于隐私和存储考虑，所有转换后的文件会在24小时后自动从我们的服务器删除。我们建议您在转换完成后立即下载文件。如果您需要再次访问文件，可能需要重新进行转换。
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5" aria-expanded="false" aria-controls="faq5">
+                                为什么选择MP3而不是其他音频格式？
+                            </button>
+                        </h3>
+                        <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#convertFaq">
+                            <div class="accordion-body">
+                                MP3是最广泛支持的音频格式之一，几乎所有设备和播放器都能播放MP3文件。它提供了良好的压缩率和音质平衡，适合大多数日常使用场景。如果您需要其他格式（如AAC、FLAC等），请关注我们的更新，我们计划在未来添加更多格式支持。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 行动召唤 -->
+<section class="cta-section py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="mb-4">需要下载视频？</h2>
+        <p class="lead mb-4">我们还提供视频下载和批量处理功能</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="/download" class="btn btn-light btn-lg">视频下载</a>
+            <a href="/batch" class="btn btn-outline-light btn-lg">批量处理</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 获取URL参数
+    const urlParams = new URLSearchParams(window.location.search);
+    const videoUrl = urlParams.get('url');
+    const fileId = urlParams.get('file_id');
+    const fileName = urlParams.get('filename');
+    
+    // 如果URL中包含视频链接，自动填充
+    if (videoUrl) {
+        document.getElementById('video-url').value = videoUrl;
+    }
+    
+    // 如果URL中包含文件ID和文件名，自动开始转换
+    if (fileId && fileName) {
+        convertFromExistingFile(fileId, fileName);
+    }
+    
+    // URL转换表单提交处理
+    const urlConvertForm = document.getElementById('url-convert-form');
+    urlConvertForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const videoUrl = document.getElementById('video-url').value;
+        const quality = document.querySelector('input[name="audio-quality"]:checked').value;
+        convertFromUrl(videoUrl, quality);
+    });
+    
+    // 上传转换表单提交处理
+    const uploadConvertForm = document.getElementById('upload-convert-form');
+    uploadConvertForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const videoFile = document.getElementById('video-file').files[0];
+        const quality = document.querySelector('input[name="upload-audio-quality"]:checked').value;
+        if (videoFile) {
+            uploadAndConvert(videoFile, quality);
+        }
+    });
+    
+    // 转换另一个按钮
+    document.getElementById('convert-another-btn').addEventListener('click', function() {
+        document.getElementById('audio-preview-card').classList.add('d-none');
+        document.getElementById('convert-complete-card').classList.add('d-none');
+        document.getElementById('url-convert-form').reset();
+        document.getElementById('upload-convert-form').reset();
+        document.getElementById('url-tab').click();
+    });
+    
+    // 加载最近转换
+    loadRecentConversions();
+});
+
+// 从URL转换
+function convertFromUrl(videoUrl, quality) {
+    // 显示转换进度卡片
+    document.getElementById('convert-progress-card').classList.remove('d-none');
+    document.getElementById('convert-status').textContent = '正在下载视频...';
+    
+    // 禁用转换按钮
+    document.getElementById('url-convert-btn').disabled = true;
+    document.getElementById('url-convert-btn').innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> 处理中...';
+    
+    // 模拟进度条
+    let progress = 0;
+    const progressBar = document.getElementById('convert-progress-bar');
+    const progressInterval = setInterval(() => {
+        progress += 3;
+        if (progress > 90) {
+            clearInterval(progressInterval);
+        }
+        progressBar.style.width = `${progress}%`;
+        
+        // 更新状态文本
+        if (progress < 30) {
+            document.getElementById('convert-status').textContent = '正在下载视频...';
+        } else if (progress < 60) {
+            document.getElementById('convert-status').textContent = '提取音频中...';
+        } else {
+            document.getElementById('convert-status').textContent = '转换为MP3格式...';
+        }
+    }, 300);
+    
+    // 调用API转换视频
+    fetch('/api/convert', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+            url: videoUrl,
+            quality: quality
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        clearInterval(progressInterval);
+        
+        // 重置按钮状态
+        document.getElementById('url-convert-btn').disabled = false;
+        document.getElementById('url-convert-btn').textContent = '转换为MP3';
+        
+        if (data.error) {
+            alert('转换失败: ' + data.error);
+            document.getElementById('convert-progress-card').classList.add('d-none');
+            return;
+        }
+        
+        // 设置进度条为100%
+        progressBar.style.width = '100%';
+        document.getElementById('convert-status').textContent = '转换完成！';
+        
+        // 隐藏进度卡片，显示完成卡片
+        setTimeout(() => {
+            document.getElementById('convert-progress-card').classList.add('d-none');
+            document.getElementById('convert-complete-card').classList.remove('d-none');
+            
+            // 设置下载链接
+            const downloadBtn = document.getElementById('download-mp3-btn');
+            downloadBtn.href = data.download_url;
+            downloadBtn.download = data.filename;
+            
+            // 设置音频预览
+            const audioPreview = document.getElementById('audio-preview');
+            audioPreview.src = data.download_url;
+            
+            const downloadPreviewBtn = document.getElementById('download-preview-btn');
+            downloadPreviewBtn.href = data.download_url;
+            downloadPreviewBtn.download = data.filename;
+            
+            // 显示音频预览卡片
+            document.getElementById('audio-preview-card').classList.remove('d-none');
+            
+            // 保存转换信息到本地存储
+            saveConversionToHistory(data.file_id, data.filename, videoUrl);
+            
+            // 更新最近转换列表
+            loadRecentConversions();
+        }, 1000);
+    })
+    .catch(error => {
+        clearInterval(progressInterval);
+        console.error('Error:', error);
+        alert('转换过程中发生错误，请稍后再试');
+        
+        // 重置按钮状态
+        document.getElementById('url-convert-btn').disabled = false;
+        document.getElementById('url-convert-btn').textContent = '转换为MP3';
+        document.getElementById('convert-progress-card').classList.add('d-none');
+    });
+}
+
+// 上传并转换
+function uploadAndConvert(videoFile, quality) {
+    // 显示转换进度卡片
+    document.getElementById('convert-progress-card').classList.remove('d-none');
+    document.getElementById('convert-status').textContent = '正在上传视频...';
+    
+    // 禁用转换按钮
+    document.getElementById('upload-convert-btn').disabled = true;
+    document.getElementById('upload-convert-btn').innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> 上传中...';
+    
+    // 创建FormData对象
+    const formData = new FormData();
+    formData.append('file', videoFile);
+    
+    // 模拟进度条
+    let progress = 0;
+    const progressBar = document.getElementById('convert-progress-bar');
+    const progressInterval = setInterval(() => {
+        progress += 2;
+        if (progress > 90) {
+            clearInterval(progressInterval);
+        }
+        progressBar.style.width = `${progress}%`;
+        
+        // 更新状态文本
+        if (progress < 40) {
+            document.getElementById('convert-status').textContent = '正在上传视频...';
+        } else if (progress < 70) {
+            document.getElementById('convert-status').textContent = '提取音频中...';
+        } else {
+            document.getElementById('convert-status').textContent = '转换为MP3格式...';
+        }
+    }, 300);
+    
+    // 上传文件
+    fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(uploadData => {
+        if (uploadData.error) {
+            clearInterval(progressInterval);
+            alert('上传失败: ' + uploadData.error);
+            document.getElementById('convert-progress-card').classList.add('d-none');
+            
+            // 重置按钮状态
+            document.getElementById('upload-convert-btn').disabled = false;
+            document.getElementById('upload-convert-btn').textContent = '上传并转换';
+            return;
+        }
+        
+        // 上传成功后，开始转换
+        document.getElementById('convert-status').textContent = '正在转换为MP3...';
+        
+        // 调用API转换视频
+        fetch('/api/convert', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                file_id: uploadData.file_id,
+                filename: uploadData.filename,
+                quality: quality
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            clearInterval(progressInterval);
+            
+            // 重置按钮状态
+            document.getElementById('upload-convert-btn').disabled = false;
+            document.getElementById('upload-convert-btn').textContent = '上传并转换';
+            
+            if (data.error) {
+                alert('转换失败: ' + data.error);
+                document.getElementById('convert-progress-card').classList.add('d-none');
+                return;
+            }
+            
+            // 设置进度条为100%
+            progressBar.style.width = '100%';
+            document.getElementById('convert-status').textContent = '转换完成！';
+            
+            // 隐藏进度卡片，显示完成卡片
+            setTimeout(() => {
+                document.getElementById('convert-progress-card').classList.add('d-none');
+                document.getElementById('convert-complete-card').classList.remove('d-none');
+                
+                // 设置下载链接
+                const downloadBtn = document.getElementById('download-mp3-btn');
+                downloadBtn.href = data.download_url;
+                downloadBtn.download = data.filename;
+                
+                // 设置音频预览
+                const audioPreview = document.getElementById('audio-preview');
+                audioPreview.src = data.download_url;
+                
+                const downloadPreviewBtn = document.getElementById('download-preview-btn');
+                downloadPreviewBtn.href = data.download_url;
+                downloadPreviewBtn.download = data.filename;
+                
+                // 显示音频预览卡片
+                document.getElementById('audio-preview-card').classList.remove('d-none');
+                
+                // 保存转换信息到本地存储
+                saveConversionToHistory(data.file_id, data.filename, null);
+                
+                // 更新最近转换列表
+                loadRecentConversions();
+            }, 1000);
+        })
+        .catch(error => {
+            clearInterval(progressInterval);
+            console.error('Error:', error);
+            alert('转换过程中发生错误，请稍后再试');
+            
+            // 重置按钮状态
+            document.getElementById('upload-convert-btn').disabled = false;
+            document.getElementById('upload-convert-btn').textContent = '上传并转换';
+            document.getElementById('convert-progress-card').classList.add('d-none');
+        });
+    })
+    .catch(error => {
+        clearInterval(progressInterval);
+        console.error('Error:', error);
+        alert('上传过程中发生错误，请稍后再试');
+        
+        // 重置按钮状态
+        document.getElementById('upload-convert-btn').disabled = false;
+        document.getElementById('upload-convert-btn').textContent = '上传并转换';
+        document.getElementById('convert-progress-card').classList.add('d-none');
+    });
+}
+
+// 从已下载的文件转换
+function convertFromExistingFile(fileId, fileName) {
+    // 显示转换进度卡片
+    document.getElementById('convert-progress-card').classList.remove('d-none');
+    document.getElementById('convert-status').textContent = '正在转换为MP3...';
+    
+    // 模拟进度条
+    let progress = 0;
+    const progressBar = document.getElementById('convert-progress-bar');
+    const progressInterval = setInterval(() => {
+        progress += 5;
+        if (progress > 90) {
+            clearInterval(progressInterval);
+        }
+        progressBar.style.width = `${progress}%`;
+    }, 300);
+    
+    // 调用API转换视频
+    fetch('/api/convert', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+            file_id: fileId,
+            filename: fileName,
+            quality: '192' // 默认使用高质量
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        clearInterval(progressInterval);
+        
+        if (data.error) {
+            alert('转换失败: ' + data.error);
+            document.getElementById('convert-progress-card').classList.add('d-none');
+            return;
+        }
+        
+        // 设置进度条为100%
+        progressBar.style.width = '100%';
+        document.getElementById('convert-status').textContent = '转换完成！';
+        
+        // 隐藏进度卡片，显示完成卡片
+        setTimeout(() => {
+            document.getElementById('convert-progress-card').classList.add('d-none');
+            document.getElementById('convert-complete-card').classList.remove('d-none');
+            
+            // 设置下载链接
+            const downloadBtn = document.getElementById('download-mp3-btn');
+            downloadBtn.href = data.download_url;
+            downloadBtn.download = data.filename;
+            
+            // 设置音频预览
+            const audioPreview = document.getElementById('audio-preview');
+            audioPreview.src = data.download_url;
+            
+            const downloadPreviewBtn = document.getElementById('download-preview-btn');
+            downloadPreviewBtn.href = data.download_url;
+            downloadPreviewBtn.download = data.filename;
+            
+            // 显示音频预览卡片
+            document.getElementById('audio-preview-card').classList.remove('d-none');
+            
+            // 保存转换信息到本地存储
+            saveConversionToHistory(data.file_id, data.filename, null);
+            
+            // 更新最近转换列表
+            loadRecentConversions();
+        }, 1000);
+    })
+    .catch(error => {
+        clearInterval(progressInterval);
+        console.error('Error:', error);
+        alert('转换过程中发生错误，请稍后再试');
+        document.getElementById('convert-progress-card').classList.add('d-none');
+    });
+}
+
+// 保存转换历史
+function saveConversionToHistory(fileId, fileName, videoUrl) {
+    // 获取现有历史
+    let history = JSON.parse(localStorage.getItem('conversionHistory') || '[]');
+    
+    // 添加新项目
+    history.unshift({
+        fileId: fileId,
+        fileName: fileName,
+        videoUrl: videoUrl,
+        timestamp: Date.now()
+    });
+    
+    // 限制历史记录数量
+    if (history.length > 10) {
+        history = history.slice(0, 10);
+    }
+    
+    // 保存回本地存储
+    localStorage.setItem('conversionHistory', JSON.stringify(history));
+}
+
+// 加载最近转换
+function loadRecentConversions() {
+    const history = JSON.parse(localStorage.getItem('conversionHistory') || '[]');
+    const container = document.getElementById('recent-conversions');
+    
+    if (history.length === 0) {
+        container.innerHTML = '<li class="list-group-item text-center text-muted py-4">暂无转换记录</li>';
+        return;
+    }
+    
+    container.innerHTML = '';
+    
+    history.forEach(item => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item';
+        
+        const fileName = document.createElement('p');
+        fileName.className = 'mb-1 text-truncate';
+        fileName.title = item.fileName;
+        fileName.textContent = item.fileName;
+        
+        const downloadLink = document.createElement('a');
+        downloadLink.href = `/api/file/${item.fileId}/${item.fileName}`;
+        downloadLink.className = 'btn btn-sm btn-outline-primary';
+        downloadLink.textContent = '下载';
+        downloadLink.download = item.fileName;
+        
+        li.appendChild(fileName);
+        li.appendChild(downloadLink);
+        container.appendChild(li);
+    });
+}
+</script>
+{% endblock %}

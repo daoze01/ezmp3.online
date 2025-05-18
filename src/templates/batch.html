@@ -1,0 +1,640 @@
+{% extends "base.html" %}
+
+{% block title %}批量视频处理工具 | 同时下载多个视频和转换MP3{% endblock %}
+{% block description %}批量下载多个视频并转换为MP3格式，提高效率节省时间。支持多平台视频链接，一键处理多个任务。{% endblock %}
+{% block canonical %}https://example.com/batch{% endblock %}
+
+{% block extra_head %}
+<!-- 批量处理页面特定的结构化数据 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "批量视频处理工具",
+  "applicationCategory": "MultimediaApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "operatingSystem": "Web"
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- 页面标题 -->
+<section class="page-header py-5 bg-primary text-white">
+    <div class="container">
+        <h1 class="display-5 fw-bold">批量视频处理工具</h1>
+        <p class="lead">同时处理多个视频链接，批量下载或转换为MP3，提高效率节省时间。</p>
+    </div>
+</section>
+
+<!-- 广告位 -->
+<div class="container my-4 text-center">
+    <div class="ad-container">
+        <!-- 广告代码将在这里 -->
+        <div class="py-3 bg-light rounded">
+            <p class="mb-0 text-muted">广告位 - 顶部横幅</p>
+        </div>
+    </div>
+</div>
+
+<!-- 批量处理功能区域 -->
+<section class="batch-section py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- 批量处理表单 -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body p-4">
+                        <h2 class="h3 mb-4">批量处理视频</h2>
+                        <form id="batch-process-form">
+                            <div class="mb-3">
+                                <label for="video-urls" class="form-label">视频链接列表</label>
+                                <textarea class="form-control" id="video-urls" rows="6" placeholder="每行输入一个视频链接，例如：&#10;https://www.youtube.com/watch?v=...&#10;https://www.bilibili.com/video/..." required></textarea>
+                                <div class="form-text">支持YouTube、Bilibili、Vimeo等多个平台，每行一个链接</div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="convert-to-mp3" checked>
+                                    <label class="form-check-label" for="convert-to-mp3">
+                                        同时转换为MP3
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="mb-3" id="quality-options">
+                                <label class="form-label">MP3音质</label>
+                                <div class="d-flex gap-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="audio-quality" id="quality-128" value="128">
+                                        <label class="form-check-label" for="quality-128">
+                                            标准 (128kbps)
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="audio-quality" id="quality-192" value="192" checked>
+                                        <label class="form-check-label" for="quality-192">
+                                            高质量 (192kbps)
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="audio-quality" id="quality-320" value="320">
+                                        <label class="form-check-label" for="quality-320">
+                                            超高质量 (320kbps)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg" id="batch-process-btn">开始批量处理</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- 批量处理进度 -->
+                <div class="card shadow-sm mb-4 d-none" id="batch-progress-card">
+                    <div class="card-body p-4">
+                        <h2 class="h4 mb-4">处理进度</h2>
+                        <div id="progress-container">
+                            <!-- 进度项将通过JavaScript动态填充 -->
+                            <div class="text-center py-4">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="mt-2 mb-0">正在准备批量处理...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 批量处理结果 -->
+                <div class="card shadow-sm mb-4 d-none" id="batch-results-card">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-4">
+                            <h2 class="h3 mb-0">处理结果</h2>
+                            <button type="button" class="btn-close" id="close-batch-results"></button>
+                        </div>
+                        
+                        <div class="alert alert-success mb-4" role="alert">
+                            <i class="bi bi-check-circle-fill me-2"></i>
+                            批量处理已完成！
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>视频</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="results-table">
+                                    <!-- 结果列表将通过JavaScript动态填充 -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mt-3">
+                            <button type="button" class="btn btn-outline-primary" id="new-batch-btn">新的批量处理</button>
+                            <button type="button" class="btn btn-primary" id="download-all-btn">下载全部</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <!-- 侧边栏广告 -->
+                <div class="ad-container mb-4">
+                    <!-- 广告代码将在这里 -->
+                    <div class="py-5 bg-light rounded text-center">
+                        <p class="mb-0 text-muted">广告位 - 侧边栏</p>
+                    </div>
+                </div>
+                
+                <!-- 批量处理提示 -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white">
+                        <h3 class="h5 mb-0">批量处理提示</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-3">
+                                <i class="bi bi-info-circle-fill text-primary me-2"></i>
+                                每次最多可处理20个视频链接
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-info-circle-fill text-primary me-2"></i>
+                                处理时间取决于视频数量和长度
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-info-circle-fill text-primary me-2"></i>
+                                所有文件将在24小时后自动删除
+                            </li>
+                            <li>
+                                <i class="bi bi-info-circle-fill text-primary me-2"></i>
+                                请确保网络连接稳定
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- 相关教程 -->
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white">
+                        <h3 class="h5 mb-0">相关教程</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <a href="/tutorials/batch-processing" class="text-decoration-none">
+                                    <i class="bi bi-arrow-right-circle me-2"></i>批量处理最佳实践
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="/tutorials/playlist-download" class="text-decoration-none">
+                                    <i class="bi bi-arrow-right-circle me-2"></i>如何下载YouTube播放列表
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="/tutorials/organize-music" class="text-decoration-none">
+                                    <i class="bi bi-arrow-right-circle me-2"></i>如何组织和管理音乐文件
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/tutorials" class="text-decoration-none">
+                                    <i class="bi bi-arrow-right-circle me-2"></i>查看所有教程
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 广告位 -->
+<div class="container my-4 text-center">
+    <div class="ad-container">
+        <!-- 广告代码将在这里 -->
+        <div class="py-3 bg-light rounded">
+            <p class="mb-0 text-muted">广告位 - 底部横幅</p>
+        </div>
+    </div>
+</div>
+
+<!-- 使用场景 -->
+<section class="use-cases py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">批量处理的应用场景</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="text-center mb-3">
+                            <i class="bi bi-collection-play text-primary display-4"></i>
+                        </div>
+                        <h3 class="h5 text-center mb-3">播放列表下载</h3>
+                        <p class="mb-0">一次性下载整个YouTube播放列表或系列视频，无需逐个处理，节省大量时间。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="text-center mb-3">
+                            <i class="bi bi-music-note-list text-primary display-4"></i>
+                        </div>
+                        <h3 class="h5 text-center mb-3">音乐收藏</h3>
+                        <p class="mb-0">将多个音乐视频批量转换为MP3格式，快速建立您的音乐收藏库。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="text-center mb-3">
+                            <i class="bi bi-laptop text-primary display-4"></i>
+                        </div>
+                        <h3 class="h5 text-center mb-3">离线学习</h3>
+                        <p class="mb-0">批量下载教育视频或课程，方便离线学习和复习，不受网络限制。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 常见问题 -->
+<section class="faq-section py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">常见问题</h2>
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="accordion" id="batchFaq">
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="true" aria-controls="faq1">
+                                批量处理有数量限制吗？
+                            </button>
+                        </h3>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#batchFaq">
+                            <div class="accordion-body">
+                                为了确保服务质量和系统稳定性，每次批量处理最多支持20个视频链接。如果您需要处理更多视频，可以分批进行。我们会根据系统负载情况定期调整这一限制。
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false" aria-controls="faq2">
+                                批量处理需要多长时间？
+                            </button>
+                        </h3>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#batchFaq">
+                            <div class="accordion-body">
+                                处理时间取决于多个因素，包括视频数量、每个视频的长度、视频质量以及当前服务器负载。一般来说，10个中等长度的视频可能需要5-15分钟完成处理。我们会显示实时进度，您可以随时查看每个视频的处理状态。
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">
+                                如何下载YouTube播放列表？
+                            </button>
+                        </h3>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#batchFaq">
+                            <div class="accordion-body">
+                                要下载YouTube播放列表，您需要先获取播放列表中每个视频的链接。您可以手动复制每个视频链接，或使用浏览器扩展程序自动提取播放列表中的所有链接。然后将这些链接粘贴到我们的批量处理工具中，每行一个链接，点击"开始批量处理"即可。
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" aria-expanded="false" aria-controls="faq4">
+                                如果某些视频处理失败怎么办？
+                            </button>
+                        </h3>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#batchFaq">
+                            <div class="accordion-body">
+                                在批量处理过程中，某些视频可能因为各种原因（如地区限制、版权保护、链接无效等）而处理失败。在这种情况下，我们会在结果页面中标明哪些视频处理成功，哪些失败，并提供失败原因。您可以单独重试那些失败的视频，或尝试使用不同的设置。
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5" aria-expanded="false" aria-controls="faq5">
+                                如何一次下载所有处理好的文件？
+                            </button>
+                        </h3>
+                        <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#batchFaq">
+                            <div class="accordion-body">
+                                处理完成后，您可以点击结果页面中的"下载全部"按钮。这将触发浏览器下载所有成功处理的文件。请注意，根据您的浏览器设置，可能需要允许多个文件同时下载。或者，您也可以单独下载每个文件。所有文件将在24小时后自动从我们的服务器删除，请确保及时下载。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 行动召唤 -->
+<section class="cta-section py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="mb-4">需要单个视频处理？</h2>
+        <p class="lead mb-4">我们还提供单个视频下载和MP3转换功能</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="/download" class="btn btn-light btn-lg">视频下载</a>
+            <a href="/convert" class="btn btn-outline-light btn-lg">视频转MP3</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 控制MP3质量选项的显示/隐藏
+    const convertToMp3Checkbox = document.getElementById('convert-to-mp3');
+    const qualityOptions = document.getElementById('quality-options');
+    
+    convertToMp3Checkbox.addEventListener('change', function() {
+        if (this.checked) {
+            qualityOptions.classList.remove('d-none');
+        } else {
+            qualityOptions.classList.add('d-none');
+        }
+    });
+    
+    // 表单提交处理
+    const batchForm = document.getElementById('batch-process-form');
+    batchForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // 获取输入的URL列表
+        const urlsText = document.getElementById('video-urls').value;
+        const urls = urlsText.split('\n').filter(url => url.trim() !== '');
+        
+        // 验证URL数量
+        if (urls.length === 0) {
+            alert('请至少输入一个视频链接');
+            return;
+        }
+        
+        if (urls.length > 20) {
+            alert('每次最多处理20个视频链接，请减少链接数量');
+            return;
+        }
+        
+        // 获取其他选项
+        const convertToMp3 = document.getElementById('convert-to-mp3').checked;
+        const quality = document.querySelector('input[name="audio-quality"]:checked').value;
+        
+        // 开始批量处理
+        startBatchProcessing(urls, convertToMp3, quality);
+    });
+    
+    // 关闭结果卡片
+    document.getElementById('close-batch-results').addEventListener('click', function() {
+        document.getElementById('batch-results-card').classList.add('d-none');
+    });
+    
+    // 新的批量处理按钮
+    document.getElementById('new-batch-btn').addEventListener('click', function() {
+        document.getElementById('batch-results-card').classList.add('d-none');
+        document.getElementById('batch-progress-card').classList.add('d-none');
+        document.getElementById('video-urls').value = '';
+        document.getElementById('batch-process-form').classList.remove('d-none');
+    });
+    
+    // 下载全部按钮
+    document.getElementById('download-all-btn').addEventListener('click', function() {
+        const downloadLinks = document.querySelectorAll('#results-table .download-link');
+        downloadLinks.forEach(link => {
+            // 创建一个点击事件来触发下载
+            const clickEvent = new MouseEvent('click', {
+                view: window,
+                bubbles: true,
+                cancelable: false
+            });
+            link.dispatchEvent(clickEvent);
+            
+            // 添加一点延迟，避免浏览器阻止多个下载
+            setTimeout(() => {}, 500);
+        });
+    });
+});
+
+// 开始批量处理
+function startBatchProcessing(urls, convertToMp3, quality) {
+    // 隐藏表单，显示进度卡片
+    document.getElementById('batch-process-form').classList.add('d-none');
+    document.getElementById('batch-progress-card').classList.remove('d-none');
+    
+    // 创建进度容器
+    const progressContainer = document.getElementById('progress-container');
+    progressContainer.innerHTML = '';
+    
+    // 为每个URL创建进度项
+    urls.forEach((url, index) => {
+        const progressItem = document.createElement('div');
+        progressItem.className = 'progress-item mb-3';
+        progressItem.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center mb-1">
+                <small class="text-truncate" style="max-width: 80%;" title="${url}">${url}</small>
+                <small class="text-muted" id="status-${index}">等待中...</small>
+            </div>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: 0%" id="progress-${index}"></div>
+            </div>
+        `;
+        progressContainer.appendChild(progressItem);
+    });
+    
+    // 禁用批量处理按钮
+    document.getElementById('batch-process-btn').disabled = true;
+    
+    // 调用API进行批量处理
+    fetch('/api/batch', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+            urls: urls,
+            convert_to_mp3: convertToMp3,
+            quality: quality
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        // 重置按钮状态
+        document.getElementById('batch-process-btn').disabled = false;
+        
+        if (data.error) {
+            alert('批量处理失败: ' + data.error);
+            document.getElementById('batch-progress-card').classList.add('d-none');
+            document.getElementById('batch-process-form').classList.remove('d-none');
+            return;
+        }
+        
+        // 显示结果
+        showBatchResults(data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('批量处理过程中发生错误，请稍后再试');
+        
+        // 重置按钮状态
+        document.getElementById('batch-process-btn').disabled = false;
+        document.getElementById('batch-progress-card').classList.add('d-none');
+        document.getElementById('batch-process-form').classList.remove('d-none');
+    });
+    
+    // 模拟进度更新（实际应用中应使用WebSocket或轮询获取真实进度）
+    simulateProgressUpdates(urls.length);
+}
+
+// 模拟进度更新
+function simulateProgressUpdates(urlCount) {
+    const progressSteps = [
+        { progress: 10, status: '正在下载...' },
+        { progress: 30, status: '正在处理...' },
+        { progress: 60, status: '转换格式...' },
+        { progress: 90, status: '即将完成...' },
+        { progress: 100, status: '已完成' }
+    ];
+    
+    // 为每个URL创建一个随机的进度时间表
+    for (let i = 0; i < urlCount; i++) {
+        let stepIndex = 0;
+        
+        // 随机延迟开始，模拟并行处理
+        setTimeout(() => {
+            const interval = setInterval(() => {
+                if (stepIndex >= progressSteps.length) {
+                    clearInterval(interval);
+                    return;
+                }
+                
+                const step = progressSteps[stepIndex];
+                const progressBar = document.getElementById(`progress-${i}`);
+                const statusText = document.getElementById(`status-${i}`);
+                
+                if (progressBar && statusText) {
+                    progressBar.style.width = `${step.progress}%`;
+                    statusText.textContent = step.status;
+                }
+                
+                stepIndex++;
+            }, 1000 + Math.random() * 2000); // 随机间隔，模拟不同视频处理速度
+        }, Math.random() * 3000); // 随机开始时间，模拟并行处理
+    }
+}
+
+// 显示批量处理结果
+function showBatchResults(data) {
+    // 隐藏进度卡片，显示结果卡片
+    document.getElementById('batch-progress-card').classList.add('d-none');
+    document.getElementById('batch-results-card').classList.remove('d-none');
+    
+    // 填充结果表格
+    const resultsTable = document.getElementById('results-table');
+    resultsTable.innerHTML = '';
+    
+    if (data.results && data.results.length > 0) {
+        data.results.forEach(result => {
+            const row = document.createElement('tr');
+            
+            // 视频信息
+            const titleCell = document.createElement('td');
+            titleCell.textContent = result.title || '未知标题';
+            row.appendChild(titleCell);
+            
+            // 状态
+            const statusCell = document.createElement('td');
+            if (result.status === 'success') {
+                statusCell.innerHTML = '<span class="badge bg-success">成功</span>';
+            } else {
+                statusCell.innerHTML = `<span class="badge bg-danger">失败</span> <small class="text-muted">${result.error || '未知错误'}</small>`;
+            }
+            row.appendChild(statusCell);
+            
+            // 操作按钮
+            const actionCell = document.createElement('td');
+            if (result.status === 'success') {
+                // 视频下载链接
+                if (result.video_file) {
+                    const videoLink = document.createElement('a');
+                    videoLink.href = `/api/file/${data.batch_id}/${result.video_file}`;
+                    videoLink.className = 'btn btn-sm btn-outline-primary me-2 download-link';
+                    videoLink.textContent = '下载视频';
+                    videoLink.download = result.video_file;
+                    actionCell.appendChild(videoLink);
+                }
+                
+                // MP3下载链接
+                if (result.mp3_file) {
+                    const mp3Link = document.createElement('a');
+                    mp3Link.href = `/api/file/${data.batch_id}/${result.mp3_file}`;
+                    mp3Link.className = 'btn btn-sm btn-outline-success download-link';
+                    mp3Link.textContent = '下载MP3';
+                    mp3Link.download = result.mp3_file;
+                    actionCell.appendChild(mp3Link);
+                }
+            } else {
+                // 重试按钮
+                const retryBtn = document.createElement('button');
+                retryBtn.className = 'btn btn-sm btn-outline-secondary';
+                retryBtn.textContent = '重试';
+                retryBtn.addEventListener('click', function() {
+                    document.getElementById('video-urls').value = result.url;
+                    document.getElementById('batch-results-card').classList.add('d-none');
+                    document.getElementById('batch-process-form').classList.remove('d-none');
+                });
+                actionCell.appendChild(retryBtn);
+            }
+            row.appendChild(actionCell);
+            
+            resultsTable.appendChild(row);
+        });
+    } else {
+        const row = document.createElement('tr');
+        const cell = document.createElement('td');
+        cell.colSpan = 3;
+        cell.textContent = '没有处理结果';
+        cell.className = 'text-center';
+        row.appendChild(cell);
+        resultsTable.appendChild(row);
+    }
+    
+    // 保存批量处理结果到本地存储
+    saveBatchToHistory(data);
+}
+
+// 保存批量处理历史
+function saveBatchToHistory(data) {
+    // 获取现有历史
+    let history = JSON.parse(localStorage.getItem('batchHistory') || '[]');
+    
+    // 添加新项目
+    history.unshift({
+        batchId: data.batch_id,
+        timestamp: Date.now(),
+        results: data.results
+    });
+    
+    // 限制历史记录数量
+    if (history.length > 5) {
+        history = history.slice(0, 5);
+    }
+    
+    // 保存回本地存储
+    localStorage.setItem('batchHistory', JSON.stringify(history));
+}
+</script>
+{% endblock %}
